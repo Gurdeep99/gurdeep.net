@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 // MongoDB connection
 const mongoURL = process.env.MONGO_URI;
+const auth = process.env.AUTH;
 
 async function connectToDB() {
   if (mongoose.connection.readyState === 0) {
@@ -24,7 +25,7 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     // Check for Authorization header
     const { authorization } = req.headers;
-    if (!authorization || authorization !== process.env.AUTH) {
+    if (!authorization || authorization !== auth) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
@@ -44,3 +45,4 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 }
+
