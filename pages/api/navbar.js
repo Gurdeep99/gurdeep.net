@@ -25,9 +25,9 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     // Check for Authorization header
     const { authorization } = req.headers;
-    if (!authorization || authorization !== auth) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
+    // if (!authorization || authorization !== auth) {
+    //   return res.status(401).json({ error: "Unauthorized" });
+    // }
 
     try {
       // Connect to MongoDB
