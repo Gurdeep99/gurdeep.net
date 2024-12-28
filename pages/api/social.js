@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     }
 
     // Check if the data is already cached
-    const cachedData = cache.get("navbarData");
+    const cachedData = cache.get("socialData");
 
     if (cachedData) {
       // If data is in cache, return it
@@ -33,12 +33,12 @@ export default async function handler(req, res) {
     // If data is not cached, connect to the database and fetch it
     await client.connect();
     const db = client.db("portfolio");
-    const collection = db.collection("navbar");
+    const collection = db.collection("social");
 
     const data = await collection.find({}).toArray();
 
     // Cache the fetched data
-    cache.set("navbarData", data);
+    cache.set("socialData", data);
 
     // Return the data as a JSON response
     res.status(200).json(data);

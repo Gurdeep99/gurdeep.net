@@ -2,9 +2,13 @@ import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { linkClick, toggleMenu } from "../utils";
 import SvgIcons from "../SvgIcons";
+import navbarApi from "../apiData/navbarApi";
+import socialApi from "../apiData/socialApi";
 
 const Header = () => {
   const [day, setDay] = useState(true);
+  const [navData, setNavData] = useState([]);
+  const [SocialData, setSocialData] = useState([]);
   useEffect(() => {
     if (day) {
       document.querySelector("body").classList.add("light-skin");
@@ -15,6 +19,27 @@ const Header = () => {
   }, [day]);
 
   const [pageToggle, setPageToggle] = useState(false);
+
+  const fetchNavbarData = () => {
+    const promises = [navbarApi(), socialApi()];
+    Promise.all(promises).then(([responce, responceSocial]) => {
+      if (responce) {
+        // console.log(responce);
+        // console.log(responceSocial);
+        setSocialData(responceSocial);
+        setNavData(responce);
+      }
+    }).finally(() => {
+      console.log("released");
+    });
+  };
+  useEffect(() => {
+    fetchNavbarData();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(day);
+  // }, [day]);
 
   return (
     <Fragment>
@@ -68,97 +93,31 @@ const Header = () => {
                         {/* menu full */}
                         <div className="menu-full">
                           <ul className="menu-full">
-                            <li className="menu-item">
-                              <Link legacyBehavior href="/">
-                                <a
-                                  className="splitting-text-anim-2"
-                                  data-splitting="chars"
-                                >
-                                  Home
-                                </a>
-                              </Link>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#services-section"
-                                onClick={() => linkClick()}
-                              >
-                                Services
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#skills-section"
-                                onClick={() => linkClick()}
-                              >
-                                Skills
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#works-section"
-                                onClick={() => linkClick()}
-                              >
-                                Works
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#resume-section"
-                                onClick={() => linkClick()}
-                              >
-                                Resume
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#testimonials-sec
-                                onClick={() => linkClick()}tion"
-                              >
-                                Testimonials
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#pricing-section"
-                                onClick={() => linkClick()}
-                              >
-                                Pricing
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#blog-section"
-                                onClick={() => linkClick()}
-                              >
-                                Blog
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#contact-section"
-                                onClick={() => linkClick()}
-                              >
-                                Contact
-                              </a>
-                            </li>
-                            <li
+                            {navData.map((item, index) => (
+                              <li className="menu-item" key={index}>
+                                {item.name !== "Home" ? (
+                                  <a
+                                    className="splitting-text-anim-2"
+                                    data-splitting="chars"
+                                    href={`/${item.slug}`}
+                                    onClick={() => linkClick()}
+                                  >
+                                    {item.name}
+                                  </a>
+                                ) : (
+                                  <Link legacyBehavior href={item.slug} key={index}>
+                                    <a
+                                      className="splitting-text-anim-2"
+                                      data-splitting="chars"
+                                    >
+                                      {item.name}
+                                    </a>
+                                  </Link>
+                                )}
+                              </li>
+                            ))}
+
+                            {/* <li
                               className={`menu-item menu-item-has-children has-children ${
                                 pageToggle ? "opened" : "closed"
                               }`}
@@ -230,35 +189,23 @@ const Header = () => {
                                   </Link>
                                 </li>
                               </ul>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                         {/* social */}
                         <div className="menu-social-links">
-                          <a
-                            href="http://dribbble.com"
-                            target="blank"
-                            className="scrolla-element-anim-1"
-                            title="dribbble"
-                          >
-                            <i className="fab fa-dribbble" />
-                          </a>
-                          <a
-                            href="http://twitter.com"
-                            target="blank"
-                            className="scrolla-element-anim-1"
-                            title="twitter"
-                          >
-                            <i className="fab fa-twitter" />
-                          </a>
-                          <a
-                            href="http://behance.com"
-                            target="blank"
-                            className="scrolla-element-anim-1"
-                            title="behance"
-                          >
-                            <i className="fab fa-behance" />
-                          </a>
+                          {SocialData.map((item, index) => (
+                             <a
+                             key={index}
+                             href={item.slug}
+                             target="_blank"
+                             className="scrolla-element-anim-1"
+                             title="dribbble"
+                           >
+                            <SvgIcons icon={item.icon} fill={day ? "#000" : "#fff"} />
+                           </a>
+                          ))}
+                          
                         </div>
                         <div className="v-line-block">
                           <span />
