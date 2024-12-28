@@ -9,6 +9,7 @@ const Header = () => {
   const [day, setDay] = useState(true);
   const [navData, setNavData] = useState([]);
   const [SocialData, setSocialData] = useState([]);
+ 
   useEffect(() => {
     if (day) {
       document.querySelector("body").classList.add("light-skin");
@@ -20,7 +21,7 @@ const Header = () => {
 
   const [pageToggle, setPageToggle] = useState(false);
 
-  const fetchNavbarData = () => {
+  const fetchApiData = () => {
     const promises = [navbarApi(), socialApi()];
     Promise.all(promises).then(([responce, responceSocial]) => {
       if (responce) {
@@ -34,7 +35,7 @@ const Header = () => {
     });
   };
   useEffect(() => {
-    fetchNavbarData();
+    fetchApiData();
   }, []);
 
   // useEffect(() => {
@@ -93,24 +94,24 @@ const Header = () => {
                         {/* menu full */}
                         <div className="menu-full">
                           <ul className="menu-full">
-                            {navData.map((item, index) => (
+                            {navData?.map((item, index) => (
                               <li className="menu-item" key={index}>
-                                {item.name !== "Home" ? (
+                                {item?.name !== "Home" ? (
                                   <a
                                     className="splitting-text-anim-2"
                                     data-splitting="chars"
-                                    href={`/${item.slug}`}
+                                    href={`/${item?.slug}`}
                                     onClick={() => linkClick()}
                                   >
-                                    {item.name}
+                                    {item?.name}
                                   </a>
                                 ) : (
-                                  <Link legacyBehavior href={item.slug} key={index}>
+                                  <Link legacyBehavior href={item?.slug} key={index}>
                                     <a
                                       className="splitting-text-anim-2"
                                       data-splitting="chars"
                                     >
-                                      {item.name}
+                                      {item?.name}
                                     </a>
                                   </Link>
                                 )}
@@ -194,15 +195,15 @@ const Header = () => {
                         </div>
                         {/* social */}
                         <div className="menu-social-links">
-                          {SocialData.map((item, index) => (
+                          {SocialData?.map((item, index) => (
                              <a
                              key={index}
-                             href={item.slug}
+                             href={item?.slug}
                              target="_blank"
                              className="scrolla-element-anim-1"
                              title="dribbble"
                            >
-                            <SvgIcons icon={item.icon} fill={day ? "#000" : "#fff"} />
+                            <SvgIcons icon={item?.icon} fill={day ? "#000" : "#fff"} />
                            </a>
                           ))}
                           

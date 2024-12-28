@@ -7,6 +7,9 @@ import {
   servicesSliderProps,
   testimonialsSliderProps,
 } from "../src/sliderProps";
+import socialApi from "../src/apiData/socialApi";
+import { useEffect, useState } from "react";
+import SvgIcons from "../src/SvgIcons";
 const PortfolioIsotope = dynamic(
   () => import("../src/components/PortfolioIsotope"),
   {
@@ -14,6 +17,18 @@ const PortfolioIsotope = dynamic(
   }
 );
 const Index = () => {
+  const [SocialData, setSocialData] = useState([]);
+  const fetchApiData = () => {
+    const promises = [socialApi()];
+    Promise.all(promises).then(([responceSocial]) => {
+        setSocialData(responceSocial);
+      }).finally(() => {
+        console.log("released");
+      });
+  };
+  useEffect(() => {
+    fetchApiData();
+  }, []);
   return (
     <Layout pageClassName={"home"}>
       {/* Section - Hero Started */}
@@ -59,15 +74,13 @@ const Index = () => {
                     </p>
                   </div>
                   <div className="social-links">
-                    <a target="_blank" rel="nofollow" href="#">
-                      <i aria-hidden="true" className="fab fa-twitter" />
+                    {SocialData?.map((item, index) => (
+                      <a target="_blank" rel="nofollow" href={item?.slug} key={index}>
+                      {/* <i aria-hidden="true" className="fab fa-twitter" /> */}
+                      <SvgIcons icon={item?.icon} fill={"#000"} />
                     </a>
-                    <a target="_blank" rel="nofollow" href="#">
-                      <i aria-hidden="true" className="fab fa-dribbble" />
-                    </a>
-                    <a target="_blank" rel="nofollow" href="#">
-                      <i aria-hidden="true" className="fab fa-behance" />
-                    </a>
+                    ))}
+                    
                   </div>
                 </div>
                 <div className="bts">
@@ -581,12 +594,12 @@ const Index = () => {
       {/* Section - Resume */}
       <Resume />
       {/* Section - Testimonials */}
-      <section
+      {/* <section
         className="lui-section lui-gradient-center"
         id="testimonials-section"
-      >
+      > */}
         {/* Heading */}
-        <div className="lui-heading">
+        {/* <div className="lui-heading">
           <div className="container">
             <div className="m-titles align-center">
               <h2
@@ -608,9 +621,9 @@ const Index = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         {/* Testimonials */}
-        <div className="v-line v-line-right">
+        {/* <div className="v-line v-line-right">
           <div className="container">
             <Swiper
               {...testimonialsSliderProps}
@@ -873,12 +886,13 @@ const Index = () => {
               <span> Reviews </span>
             </div>
           </div>
-        </div>
-      </section>
+        </div> */}
+      {/* </section> */}
+
       {/* Section - Pricing */}
-      <section className="lui-section lui-gradient-center" id="pricing-section">
+      {/* <section className="lui-section lui-gradient-center" id="pricing-section"> */}
         {/* Heading */}
-        <div className="lui-heading">
+        {/* <div className="lui-heading">
           <div className="container">
             <div className="m-titles align-center">
               <h2
@@ -900,9 +914,9 @@ const Index = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         {/* Pricing */}
-        <div className="v-line v-line-left">
+        {/* <div className="v-line v-line-left">
           <div className="container">
             <div className="pricing-items row">
               <div className="pricing-col col-xs-12 col-sm-6 col-md-6 col-lg-4">
@@ -1084,8 +1098,8 @@ const Index = () => {
               <span> Pricing </span>
             </div>
           </div>
-        </div>
-      </section>
+        </div> */}
+      {/* </section> */}
       {/* Section - Blog */}
       <section className="lui-section lui-gradient-top" id="blog-section">
         {/* Heading */}
@@ -1416,6 +1430,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+      
     </Layout>
   );
 };

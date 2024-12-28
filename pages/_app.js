@@ -4,6 +4,7 @@ import PreLoader from "../src/layouts/PreLoader";
 import "../styles/globals.css";
 const App = ({ Component, pageProps }) => {
   const [loader, setLoader] = useState(true);
+  
   useEffect(() => {
     setTimeout(() => {
       setLoader(false);
